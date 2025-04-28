@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.marieteamclient.HelloController">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <ImageView fx:id="logoImage" fitHeight="150.0" preserveRatio="true" pickOnBounds="true">
+        <image>
+            <Image url="@logo_mt.png" />
+        </image>
+    </ImageView>
+
+    <Label fx:id="welcomeText" text="Bienvenue dans l'application MarieTeam Client" />
+
+    <Button onAction="#onHelloButtonClick" styleClass="button-primary" text="Connecter la BDD" />
+
+    <!-- Nouveau label pour afficher le message de connexion -->
+    <Label fx:id="statusLabel" text="État de la connexion..." />
+</VBox>

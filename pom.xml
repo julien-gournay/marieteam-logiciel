@@ -74,6 +74,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.29</version> <!-- Remplace cette version par celle que tu utilises -->
+        </dependency>
     </dependencies>
 
     <build>
@@ -96,7 +101,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.marieteamclient/com.example.marieteamclient.HelloApplication
+                            <mainClass>com.example.marieteamclient/fr.marieteamclient.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

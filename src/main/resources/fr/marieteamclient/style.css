@@ -1,0 +1,18 @@
+.root {
+    -fx-font-family: "Product Sans", sans-serif;
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+}
+
+.button-primary {
+    -fx-padding: 12px 30px;
+    -fx-min-height: 30px; /* Approximation pour fit-content */
+    -fx-alignment: center;
+    -fx-background-radius: 71px;
+    -fx-border-width: 0;
+    -fx-font-family: "Product Sans", sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-background-color: #3a2afa;
+    -fx-text-fill: #cbdaff;
+}

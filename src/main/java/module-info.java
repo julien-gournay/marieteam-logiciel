@@ -1,4 +1,4 @@
-module com.example.marieteamclient {
+module fr.marieteamclient {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -7,7 +7,9 @@ module com.example.marieteamclient {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
+    requires mysql.connector.java;
 
-    opens com.example.marieteamclient to javafx.fxml;
-    exports com.example.marieteamclient;
+    opens fr.marieteamclient to javafx.fxml;
+    exports fr.marieteamclient;
 }
