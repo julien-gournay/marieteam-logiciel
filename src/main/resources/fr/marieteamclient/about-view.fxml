@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.marieteamclient.AboutController">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="À propos de l'application MarieTeam Client" style="-fx-font-size: 18px;"/>
+
+    <TextArea text="L'application MarieTeam Client vous permet de générer des brochures PDF avec des informations sur les bateaux voyageurs.\n\nVersion 1.0\nDéveloppée par Julien Gournay et Donovan Mercier" wrapText="true" editable="false" prefRowCount="10" prefColumnCount="40"/>
+
+    <Button text="Retour" onAction="#handleBackButtonClick" styleClass="button-primary" />
+</VBox>

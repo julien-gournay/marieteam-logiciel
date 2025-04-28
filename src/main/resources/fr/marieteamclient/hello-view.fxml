@@ -23,8 +23,10 @@
 
     <Label fx:id="welcomeText" text="Bienvenue dans l'application MarieTeam Client" />
 
-    <Button onAction="#onHelloButtonClick" styleClass="button-primary" text="Connecter la BDD" />
+    <Button onAction="#onHelloButtonClick" styleClass="button-primary" text="Tester la connexion" />
 
-    <!-- Nouveau label pour afficher le message de connexion -->
+    <!-- Nouveau bouton "À propos" -->
+    <Button text="À propos" onAction="#handleAboutButtonClick" styleClass="button-primary" />
+
     <Label fx:id="statusLabel" text="État de la connexion..." />
 </VBox>
