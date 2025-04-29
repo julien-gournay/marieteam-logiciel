@@ -3,6 +3,8 @@ package fr.marieteamclient;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
 
 public class AboutController {
 
@@ -11,9 +13,10 @@ public class AboutController {
 
     // Méthode appelée lorsque le bouton "Retour" est cliqué
     @FXML
-    public void handleBackButtonClick() {
-        // Ferme la fenêtre actuelle en récupérant le stage via le bouton
-        Stage stage = (Stage) backButton.getScene().getWindow();
+    public void handleBackButtonClick(ActionEvent event) {
+        // Récupère la fenêtre actuelle à partir de l'événement
+        Node source = (Node) event.getSource();
+        Stage stage = (Stage) source.getScene().getWindow();
         stage.close(); // Ferme la fenêtre actuelle
     }
 }

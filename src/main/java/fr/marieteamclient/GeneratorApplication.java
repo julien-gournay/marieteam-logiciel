@@ -16,8 +16,22 @@ import java.io.IOException;
 public class GeneratorApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        // Tester la connexion à la base de données
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            System.out.println("Connexion à la base de données réussie !");
+            conn.close();
+        } catch (SQLException e) {
+            System.err.println("Erreur de connexion à la base de données : " + e.getMessage());
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader(GeneratorApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Constants.APP_WIDTH, Constants.APP_HEIGHT);
+        
+        // Passer la référence de la scène au contrôleur
+        HelloController controller = fxmlLoader.getController();
+        controller.setStage(stage);
+        
         stage.setTitle(Constants.APP_NAME);
         stage.setResizable(true);
         //stage.setMaximized(true);
@@ -28,15 +42,5 @@ public class GeneratorApplication extends Application {
 
     public static void main(String[] args) {
         launch();
-
-        // Tenter de se connecter à la base de données
-        try (Connection conn = DatabaseConnection.connect()) {
-            if (conn != null) {
-                System.out.println("Connexion à la base de données réussie !");
-                // Afficher un message ou continuer avec le reste de l'application
-            }
-        } catch (SQLException e) {
-            System.out.println("Erreur de connexion à la base de données : " + e.getMessage());
-        }
     }
 }

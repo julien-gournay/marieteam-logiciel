@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="fr.marieteamclient.EquipmentDeleteController"
+      spacing="10"
+      styleClass="form-container">
+      
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Supprimer un équipement" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    
+    <VBox spacing="10">
+        <Label text="Sélectionnez un équipement:"/>
+        <ComboBox fx:id="equipmentSelector" promptText="Sélectionnez un équipement"/>
+    </VBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Annuler" onAction="#handleCancel" styleClass="button-secondary"/>
+        <Button fx:id="deleteButton" text="Supprimer" onAction="#handleDelete" styleClass="button-primary"/>
+    </HBox>
+</VBox> 

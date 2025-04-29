@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="fr.marieteamclient.BateauxController"
+      spacing="10">
+      
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <Label text="Liste des Bateaux" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    
+    <TableView fx:id="bateauxTable" onMouseClicked="#handleBateauSelection">
+        <columns>
+            <TableColumn fx:id="nomColumn" text="Nom du Bateau" prefWidth="200"/>
+            <TableColumn fx:id="marqueColumn" text="Marque" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <Label text="Équipements du Bateau" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    
+    <ListView fx:id="equipementsList" prefHeight="200"/>
+
+</VBox> 

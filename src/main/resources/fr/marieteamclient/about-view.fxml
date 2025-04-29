@@ -16,7 +16,14 @@
 
     <Label text="À propos de l'application MarieTeam Client" style="-fx-font-size: 18px;"/>
 
-    <TextArea text="L'application MarieTeam Client vous permet de générer des brochures PDF avec des informations sur les bateaux voyageurs.\n\nVersion 1.0\nDéveloppée par Julien Gournay et Donovan Mercier" wrapText="true" editable="false" prefRowCount="10" prefColumnCount="40"/>
+    <TextArea text="L'application MarieTeam Client vous permet de générer des brochures PDF avec des informations sur les bateaux voyageurs.&#10;&#10;Version 1.0&#10;Développée par Julien Gournay et Donovan Mercier" 
+              wrapText="true" 
+              editable="false" 
+              prefRowCount="10" 
+              prefColumnCount="40"/>
 
-    <Button text="Retour" onAction="#handleBackButtonClick" styleClass="button-primary" />
+    <Button fx:id="backButton" 
+            text="Retour à l'accueil" 
+            onAction="#handleBackButtonClick" 
+            styleClass="button-primary"/>
 </VBox>
