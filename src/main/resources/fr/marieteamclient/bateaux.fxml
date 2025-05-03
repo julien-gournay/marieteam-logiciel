@@ -3,11 +3,16 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fr.marieteamclient.BateauxController"
       spacing="10">
+      
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
       
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
@@ -21,11 +26,11 @@
         <TextField fx:id="searchField" promptText="Entrez le nom d'un bateau..."/>
     </HBox>
     
-    <TableView fx:id="bateauxTable">
+    <TableView fx:id="bateauxTable" prefHeight="200">
         <columns>
             <TableColumn fx:id="nomColumn" text="Nom du Bateau" prefWidth="200"/>
             <TableColumn fx:id="marqueColumn" text="Marque" prefWidth="150"/>
-            <TableColumn fx:id="largeurColumn" text="Largueur (m)" prefWidth="150"/>
+            <TableColumn fx:id="largeurColumn" text="Largeur (m)" prefWidth="150"/>
             <TableColumn fx:id="longueurColumn" text="Longueur (m)" prefWidth="150"/>
             <TableColumn fx:id="vitesseColumn" text="Vitesse (noeuds)" prefWidth="150"/>
         </columns>

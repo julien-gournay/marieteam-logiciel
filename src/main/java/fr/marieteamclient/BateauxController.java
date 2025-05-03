@@ -239,6 +239,49 @@ public class BateauxController {
         }
     }
 
+    @FXML
+    private void handleRemoveEquipmentFromBoat() {
+        if (selectedBateau == null) {
+            showAlert("Erreur", "Veuillez sélectionner un bateau", AlertType.ERROR);
+            return;
+        }
+
+        ObservableList<Equipement> selectedEquipements = bateauEquipementsList.getSelectionModel().getSelectedItems();
+        if (selectedEquipements.isEmpty()) {
+            showAlert("Erreur", "Veuillez sélectionner au moins un équipement à supprimer", AlertType.ERROR);
+            return;
+        }
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
+            
+            // Préparer la requête de suppression
+            PreparedStatement deleteStmt = conn.prepareStatement(
+                "DELETE FROM possede WHERE idBateau = ? AND idEquipement = ?"
+            );
+            
+            int removedCount = 0;
+            
+            for (Equipement equipement : selectedEquipements) {
+                deleteStmt.setInt(1, selectedBateau.getIdBateau());
+                deleteStmt.setInt(2, equipement.getIdEquipement());
+                removedCount += deleteStmt.executeUpdate();
+            }
+
+            // Afficher un message de confirmation
+            showAlert("Succès", removedCount + " équipement(s) supprimé(s) avec succès.", AlertType.INFORMATION);
+            
+            // Recharger les équipements du bateau
+            loadBateauEquipements(selectedBateau.getIdBateau());
+            
+            deleteStmt.close();
+            conn.close();
+        } catch (Exception e) {
+            showAlert("Erreur", "Erreur lors de la suppression des équipements : " + e.getMessage(), AlertType.ERROR);
+            e.printStackTrace();
+        }
+    }
+
     private void showAlert(String title, String content, AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

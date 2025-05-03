@@ -205,7 +205,7 @@ public class HelloController {
     public void handleAbout() {
         try {
             // Charger la vue about
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/about-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("about-view.fxml"));
             Parent aboutView = loader.load();
             
             // Remplacer le contenu de la fenêtre principale
@@ -225,7 +225,7 @@ public class HelloController {
     private void handleHomeButton() {
         try {
             // Recharger la vue d'accueil
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
             Parent root = loader.load();
             
             // Récupérer la taille actuelle de la fenêtre
@@ -235,7 +235,7 @@ public class HelloController {
             
             // Créer la nouvelle scène avec les styles
             Scene scene = new Scene(root, currentWidth, currentHeight);
-            scene.getStylesheets().add(getClass().getResource("/fr/marieteamclient/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
             
             // Appliquer la scène en préservant la taille
             stage.setScene(scene);
@@ -249,14 +249,30 @@ public class HelloController {
     @FXML
     private void handleBateauxButton() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/bateaux.fxml"));
+            // Charger la vue des bateaux
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("bateaux.fxml"));
             Parent root = loader.load();
             
-            // Remplacer le contenu de la fenêtre principale
-            mainContainer.getChildren().clear();
-            mainContainer.getChildren().add(root);
+            // Récupérer la taille actuelle de la fenêtre
+            Stage stage = (Stage) mainContainer.getScene().getWindow();
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            // Créer la nouvelle scène avec les styles
+            Scene scene = new Scene(root, currentWidth, currentHeight);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            
+            // Appliquer la scène en préservant la taille
+            stage.setScene(scene);
+            stage.setWidth(currentWidth);
+            stage.setHeight(currentHeight);
         } catch (IOException e) {
             e.printStackTrace();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de charger la vue des bateaux : " + e.getMessage());
+            alert.showAndWait();
         }
     }
 
@@ -346,7 +362,7 @@ public class HelloController {
     private void handleHelp() {
         try {
             // Charger la vue d'aide
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/help-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("help-view.fxml"));
             Parent helpView = loader.load();
             
             // Remplacer le contenu de la fenêtre principale
