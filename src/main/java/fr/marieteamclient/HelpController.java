@@ -9,12 +9,11 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class AboutController {
+public class HelpController {
 
     @FXML
     private VBox mainContainer;
 
-    // Méthode appelée lorsque le bouton "Retour" est cliqué
     @FXML
     private void handleBackButtonClick() {
         try {
@@ -29,4 +28,4 @@ public class AboutController {
             e.printStackTrace();
         }
     }
-}
+} 

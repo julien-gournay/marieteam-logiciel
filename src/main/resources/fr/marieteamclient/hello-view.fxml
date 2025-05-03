@@ -9,67 +9,70 @@
 
 <ScrollPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="fr.marieteamclient.HelloController" fitToWidth="true" hbarPolicy="NEVER">
-    <VBox alignment="TOP_CENTER" spacing="25.0" styleClass="main-container" 
-          prefWidth="800" minHeight="700" fx:id="mainContainer">
+    <VBox>
         <stylesheets>
             <URL value="@style.css" />
         </stylesheets>
 
-        <padding>
-            <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
-        </padding>
-
-        <!-- En-tête avec logo -->
-        <VBox alignment="CENTER" styleClass="header-section" spacing="15">
-            <ImageView fx:id="logoImage" fitHeight="100.0" preserveRatio="true" pickOnBounds="true">
-                <image>
-                    <Image url="@logo_mt.png" />
-                </image>
-            </ImageView>
-            <Label fx:id="welcomeText" text="Bienvenue dans l'application MarieTeam Client" 
-                   styleClass="welcome-text"/>
-        </VBox>
+        <!-- Barre de menus -->
+        <MenuBar>
+            <Menu text="Fichier">
+                <MenuItem text="Réactualiser la connexion" onAction="#onHelloButtonClick"/>
+                <MenuItem text="Générer un PDF" onAction="#handleGenerateButton"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Fermer" onAction="#handleClose"/>
+            </Menu>
+            <Menu text="Bateaux">
+                <MenuItem text="Liste des bateaux" onAction="#handleBateauxButton"/>
+            </Menu>
+            <Menu text="Équipements">
+                <MenuItem text="Ajouter un équipement" onAction="#handleAddEquipment"/>
+                <MenuItem text="Modifier un équipement" onAction="#handleEditEquipment"/>
+                <MenuItem text="Supprimer un équipement" onAction="#handleDeleteEquipment"/>
+            </Menu>
+            <Menu text="Aide">
+                <MenuItem text="À propos" onAction="#handleAbout"/>
+                <MenuItem text="Centre d'aide" onAction="#handleHelp"/>
+            </Menu>
+        </MenuBar>
 
         <!-- Section de connexion -->
-        <VBox alignment="CENTER" spacing="15" styleClass="connection-section" prefWidth="600">
-            <HBox alignment="CENTER" spacing="10" styleClass="connection-status-box">
-                <Circle fx:id="connectionStatusIndicator" radius="5" fill="gray" />
-                <Label fx:id="statusLabel" text="État de la connexion..." styleClass="status-text"/>
-            </HBox>
-            <Button onAction="#onHelloButtonClick" styleClass="button-primary" text="🔌 Tester la connexion" 
-                    prefWidth="200"/>
-        </VBox>
+        <HBox alignment="CENTER_RIGHT" spacing="15" styleClass="connection-section">
+            <Circle fx:id="connectionStatusIndicator" radius="5" fill="gray" />
+            <Label fx:id="statusLabel" text="État de la connexion..." styleClass="status-text"/>
+        </HBox>
 
-        <!-- Section principale avec les boutons d'action -->
-        <VBox alignment="CENTER" spacing="20" styleClass="main-actions-section" prefWidth="600">
-            <Label text="Actions disponibles" styleClass="section-title"/>
-            <HBox alignment="CENTER" spacing="20">
-                <Button text="🚢 Liste des Bateaux" onAction="#handleBateauxButton" 
-                        styleClass="button-primary, action-button" prefWidth="250"/>
-                <Button text="📄 Générer un PDF" onAction="#handleGenerateButton" 
-                        styleClass="button-primary, action-button" prefWidth="250"/>
-            </HBox>
-        </VBox>
+        <VBox fx:id="mainContainer" alignment="TOP_CENTER" spacing="25.0" styleClass="main-container" 
+              prefWidth="800" minHeight="700">
+            <padding>
+                <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+            </padding>
 
-        <!-- Section de gestion des équipements -->
-        <VBox alignment="CENTER" spacing="20" styleClass="equipments-section" prefWidth="600">
-            <Label text="Gestion des Équipements" styleClass="section-title"/>
-            <Label fx:id="equipmentStatusLabel" text="" styleClass="status-text" 
-                   prefWidth="500" wrapText="true" alignment="CENTER"/>
-            <HBox alignment="CENTER" spacing="15">
-                <Button text="➕ Ajouter un équipement" onAction="#handleAddEquipment" 
-                        styleClass="button-primary, action-button" prefWidth="200"/>
-                <Button text="🔄 Modifier un équipement" onAction="#handleEditEquipment" 
-                        styleClass="button-primary, action-button" prefWidth="200"/>
-                <Button text="❌ Supprimer un équipement" onAction="#handleDeleteEquipment" 
-                        styleClass="button-primary, action-button" prefWidth="200"/>
-            </HBox>
-        </VBox>
+            <!-- Section principale avec les boutons d'action -->
+            <VBox alignment="CENTER" spacing="20" styleClass="main-actions-section" prefWidth="600">
+                <Label text="Actions disponibles" styleClass="section-title"/>
+                <HBox alignment="CENTER" spacing="20">
+                    <Button text="🚢 Liste des Bateaux" onAction="#handleBateauxButton" 
+                            styleClass="button-primary, action-button" prefWidth="250"/>
+                    <Button text="📄 Générer un PDF" onAction="#handleGenerateButton" 
+                            styleClass="button-primary, action-button" prefWidth="250"/>
+                </HBox>
+            </VBox>
 
-        <!-- Pied de page -->
-        <VBox alignment="CENTER" styleClass="footer-section">
-            <Button text="📋 À propos" onAction="#handleAboutButtonClick" 
-                    styleClass="button-secondary" prefWidth="150"/>
+            <!-- Section de gestion des équipements -->
+            <VBox alignment="CENTER" spacing="20" styleClass="equipments-section" prefWidth="600">
+                <Label text="Gestion des Équipements" styleClass="section-title"/>
+                <Label fx:id="equipmentStatusLabel" text="" styleClass="status-text" 
+                       prefWidth="500" wrapText="true" alignment="CENTER"/>
+                <HBox alignment="CENTER" spacing="15">
+                    <Button text="➕ Ajouter un équipement" onAction="#handleAddEquipment" 
+                            styleClass="button-primary, action-button" prefWidth="200"/>
+                    <Button text="🔄 Modifier un équipement" onAction="#handleEditEquipment" 
+                            styleClass="button-primary, action-button" prefWidth="200"/>
+                    <Button text="❌ Supprimer un équipement" onAction="#handleDeleteEquipment" 
+                            styleClass="button-primary, action-button" prefWidth="200"/>
+                </HBox>
+            </VBox>
         </VBox>
     </VBox>
 </ScrollPane>

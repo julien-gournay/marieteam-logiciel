@@ -22,6 +22,7 @@ public final class Constants {
     }
 
     public static final String APP_NAME = "MarieTeam Client";
+    public static final String APP_VERSION = "1.0";
     public static final double APP_WIDTH = 1200;
     public static final double APP_HEIGHT = 700;
 }

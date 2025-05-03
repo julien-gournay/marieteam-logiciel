@@ -15,15 +15,39 @@
 
     <Label text="Liste des Bateaux" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
     
-    <TableView fx:id="bateauxTable" onMouseClicked="#handleBateauSelection">
+    <!-- Barre de recherche -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Rechercher un bateau:"/>
+        <TextField fx:id="searchField" promptText="Entrez le nom d'un bateau..."/>
+    </HBox>
+    
+    <TableView fx:id="bateauxTable">
         <columns>
             <TableColumn fx:id="nomColumn" text="Nom du Bateau" prefWidth="200"/>
             <TableColumn fx:id="marqueColumn" text="Marque" prefWidth="150"/>
+            <TableColumn fx:id="largeurColumn" text="Largueur (m)" prefWidth="150"/>
+            <TableColumn fx:id="longueurColumn" text="Longueur (m)" prefWidth="150"/>
+            <TableColumn fx:id="vitesseColumn" text="Vitesse (noeuds)" prefWidth="150"/>
         </columns>
     </TableView>
 
-    <Label text="Équipements du Bateau" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <HBox spacing="20" prefHeight="250">
+        <VBox spacing="5" prefWidth="300">
+            <Label text="Équipements disponibles" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <ListView fx:id="equipementsList" prefHeight="200"/>
+        </VBox>
+        
+        <VBox spacing="5" prefWidth="300">
+            <Label text="Équipements du bateau" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <ListView fx:id="bateauEquipementsList" prefHeight="200"/>
+        </VBox>
+    </HBox>
     
-    <ListView fx:id="equipementsList" prefHeight="200"/>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Ajouter les équipements au bateau" onAction="#handleAddEquipmentToBoat" 
+                styleClass="button-primary" prefWidth="200"/>
+        <Button text="Supprimer les équipements du bateau" onAction="#handleRemoveEquipmentFromBoat" 
+                styleClass="button-primary" prefWidth="200"/>
+    </HBox>
 
 </VBox> 

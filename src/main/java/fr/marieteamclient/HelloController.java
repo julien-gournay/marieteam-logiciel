@@ -14,6 +14,9 @@ import javafx.scene.control.Button;
 import javafx.stage.FileChooser;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +45,18 @@ public class HelloController {
 
     @FXML
     public void initialize() {
-        // État initial de la connexion
-        updateConnectionStatus(false);
+        // Tester la connexion à la base de données immédiatement
+        String message = DatabaseConnection.testConnection();
+        boolean isConnected = message.contains("réussie");
+        
+        updateConnectionStatus(isConnected);
+        statusLabel.getStyleClass().clear();
+        if (isConnected) {
+            statusLabel.getStyleClass().add("success");
+        } else {
+            statusLabel.getStyleClass().add("error");
+        }
+        statusLabel.setText(message);
     }
 
     public void setStage(Stage stage) {
@@ -66,24 +79,62 @@ public class HelloController {
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Enregistrer le PDF");
+            fileChooser.setInitialFileName("BateauVoyageur.pdf");
             fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
             );
+            
+            // Définir le répertoire par défaut sur le dossier Documents
+            String userHome = System.getProperty("user.home");
+            File defaultDirectory = new File(userHome + "/Documents");
+            fileChooser.setInitialDirectory(defaultDirectory);
+            
             File file = fileChooser.showSaveDialog(null);
 
             if (file != null) {
+                // S'assurer que le fichier a l'extension .pdf
+                final String filePath = file.getAbsolutePath() + 
+                    (file.getAbsolutePath().toLowerCase().endsWith(".pdf") ? "" : ".pdf");
+                
                 List<Bateau> bateaux = getBateauxFromDatabase();
                 List<Equipement> equipements = getEquipementsFromDatabase();
 
-                PDFGenerator.generateBateauxPDF(bateaux, file.getAbsolutePath());
-                statusLabel.getStyleClass().clear();
-                statusLabel.getStyleClass().add("success");
-                statusLabel.setText("PDF généré avec succès !");
+                PDFGenerator.generateBateauxPDF(bateaux, filePath);
+                
+                // Afficher une alerte de succès avec un bouton pour ouvrir le fichier
+                Alert successAlert = new Alert(AlertType.INFORMATION);
+                successAlert.setTitle("Succès");
+                successAlert.setHeaderText("PDF généré avec succès");
+                successAlert.setContentText("Le fichier a été enregistré dans :\n" + filePath);
+                
+                // Ajouter un bouton pour ouvrir le fichier
+                ButtonType openButton = new ButtonType("Ouvrir");
+                ButtonType closeButton = new ButtonType("Fermer");
+                successAlert.getButtonTypes().setAll(openButton, closeButton);
+                
+                // Afficher l'alerte et gérer la réponse
+                successAlert.showAndWait().ifPresent(response -> {
+                    if (response == openButton) {
+                        try {
+                            // Ouvrir le fichier avec l'application par défaut
+                            java.awt.Desktop.getDesktop().open(new File(filePath));
+                        } catch (Exception e) {
+                            Alert errorAlert = new Alert(AlertType.ERROR);
+                            errorAlert.setTitle("Erreur");
+                            errorAlert.setHeaderText("Impossible d'ouvrir le fichier");
+                            errorAlert.setContentText("Une erreur est survenue lors de l'ouverture du fichier.");
+                            errorAlert.showAndWait();
+                        }
+                    }
+                });
             }
         } catch (Exception e) {
-            statusLabel.getStyleClass().clear();
-            statusLabel.getStyleClass().add("error");
-            statusLabel.setText("Erreur lors de la génération du PDF : " + e.getMessage());
+            // Afficher une alerte d'erreur
+            Alert errorAlert = new Alert(AlertType.ERROR);
+            errorAlert.setTitle("Erreur");
+            errorAlert.setHeaderText("Erreur lors de la génération du PDF");
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
             e.printStackTrace();
         }
     }
@@ -151,14 +202,48 @@ public class HelloController {
 
     // Méthode appelée lorsque le bouton "À propos" est cliqué
     @FXML
-    public void handleAboutButtonClick() throws IOException {
-        // Charge la vue "À propos"
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("about-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 300);  // Ajuste les dimensions
-        Stage stage = new Stage();
-        stage.setTitle("À propos de l'application");
-        stage.setScene(scene);
-        stage.show();
+    public void handleAbout() {
+        try {
+            // Charger la vue about
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/about-view.fxml"));
+            Parent aboutView = loader.load();
+            
+            // Remplacer le contenu de la fenêtre principale
+            Scene scene = statusLabel.getScene();
+            scene.setRoot(aboutView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de charger la vue about : " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleHomeButton() {
+        try {
+            // Recharger la vue d'accueil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/hello-view.fxml"));
+            Parent root = loader.load();
+            
+            // Récupérer la taille actuelle de la fenêtre
+            Stage stage = (Stage) mainContainer.getScene().getWindow();
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            // Créer la nouvelle scène avec les styles
+            Scene scene = new Scene(root, currentWidth, currentHeight);
+            scene.getStylesheets().add(getClass().getResource("/fr/marieteamclient/style.css").toExternalForm());
+            
+            // Appliquer la scène en préservant la taille
+            stage.setScene(scene);
+            stage.setWidth(currentWidth);
+            stage.setHeight(currentHeight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -167,10 +252,9 @@ public class HelloController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/bateaux.fxml"));
             Parent root = loader.load();
             
-            Stage stage = new Stage();
-            stage.setTitle("Liste des Bateaux et Équipements");
-            stage.setScene(new Scene(root));
-            stage.show();
+            // Remplacer le contenu de la fenêtre principale
+            mainContainer.getChildren().clear();
+            mainContainer.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -250,5 +334,31 @@ public class HelloController {
                 break;
         }
         equipmentStatusLabel.setText(icon + message);
+    }
+
+    @FXML
+    private void handleClose() {
+        Stage stage = (Stage) mainContainer.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void handleHelp() {
+        try {
+            // Charger la vue d'aide
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/help-view.fxml"));
+            Parent helpView = loader.load();
+            
+            // Remplacer le contenu de la fenêtre principale
+            Scene scene = statusLabel.getScene();
+            scene.setRoot(helpView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de charger la vue d'aide : " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 }
