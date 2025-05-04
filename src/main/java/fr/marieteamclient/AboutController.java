@@ -19,7 +19,7 @@ public class AboutController {
     private void handleBackButtonClick() {
         try {
             // Recharger la vue d'accueil
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/marieteamclient/home-view.fxml"));
             Parent root = loader.load();
             
             // Remplacer le contenu de la fenêtre principale

@@ -25,4 +25,7 @@ public final class Constants {
     public static final String APP_VERSION = "1.0";
     public static final double APP_WIDTH = 1200;
     public static final double APP_HEIGHT = 700;
+
+    // Intervalle de vérification de la connexion en millisecondes (3 minutes)
+    public static final int DATABASE_CHECK_INTERVAL = 3 * 60 * 1000;
 }

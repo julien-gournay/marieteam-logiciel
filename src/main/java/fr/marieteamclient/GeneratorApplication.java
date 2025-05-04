@@ -25,11 +25,11 @@ public class GeneratorApplication extends Application {
             System.err.println("Erreur de connexion à la base de données : " + e.getMessage());
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(GeneratorApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GeneratorApplication.class.getResource("home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), Constants.APP_WIDTH, Constants.APP_HEIGHT);
         
         // Passer la référence de la scène au contrôleur
-        HelloController controller = fxmlLoader.getController();
+        HomeController controller = fxmlLoader.getController();
         controller.setStage(stage);
         
         stage.setTitle(Constants.APP_NAME);

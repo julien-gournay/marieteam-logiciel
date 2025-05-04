@@ -18,9 +18,9 @@ public class EquipmentFormController {
     @FXML
     private Button saveButton;
 
-    private HelloController mainController;
+    private HomeController mainController;
 
-    public void setMainController(HelloController controller) {
+    public void setMainController(HomeController controller) {
         this.mainController = controller;
     }
 

@@ -4,6 +4,7 @@ import fr.marieteamclient.database.DatabaseConnection;
 import fr.marieteamclient.models.Bateau;
 import fr.marieteamclient.models.Equipement;
 import fr.marieteamclient.utils.PDFGenerator;
+import fr.marieteamclient.constants.Constants;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +31,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HelloController {
+public class HomeController {
 
     @FXML
     private Label welcomeText;
@@ -43,9 +48,26 @@ public class HelloController {
     @FXML
     private VBox mainContainer;
 
+    private Timeline connectionCheckTimeline;
+
     @FXML
     public void initialize() {
         // Tester la connexion à la base de données immédiatement
+        checkDatabaseConnection();
+        
+        // Configurer la vérification périodique de la connexion
+        setupConnectionCheck();
+    }
+
+    private void setupConnectionCheck() {
+        connectionCheckTimeline = new Timeline(
+            new KeyFrame(Duration.millis(Constants.DATABASE_CHECK_INTERVAL), event -> checkDatabaseConnection())
+        );
+        connectionCheckTimeline.setCycleCount(Animation.INDEFINITE);
+        connectionCheckTimeline.play();
+    }
+
+    private void checkDatabaseConnection() {
         String message = DatabaseConnection.testConnection();
         boolean isConnected = message.contains("réussie");
         
@@ -225,7 +247,7 @@ public class HelloController {
     private void handleHomeButton() {
         try {
             // Recharger la vue d'accueil
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("home-view.fxml"));
             Parent root = loader.load();
             
             // Récupérer la taille actuelle de la fenêtre

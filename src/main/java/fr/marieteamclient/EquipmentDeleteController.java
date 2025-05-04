@@ -21,9 +21,9 @@ public class EquipmentDeleteController {
     private Button deleteButton;
 
     private ObservableList<Equipement> equipments = FXCollections.observableArrayList();
-    private HelloController mainController;
+    private HomeController mainController;
 
-    public void setMainController(HelloController controller) {
+    public void setMainController(HomeController controller) {
         this.mainController = controller;
     }
 

@@ -13,46 +13,71 @@
     <stylesheets>
         <URL value="@style.css"/>
     </stylesheets>
-      
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
 
-    <Label text="Liste des Bateaux" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-    
-    <!-- Barre de recherche -->
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Rechercher un bateau:"/>
-        <TextField fx:id="searchField" promptText="Entrez le nom d'un bateau..."/>
-    </HBox>
-    
-    <TableView fx:id="bateauxTable" prefHeight="200">
-        <columns>
-            <TableColumn fx:id="nomColumn" text="Nom du Bateau" prefWidth="200"/>
-            <TableColumn fx:id="marqueColumn" text="Marque" prefWidth="150"/>
-            <TableColumn fx:id="largeurColumn" text="Largeur (m)" prefWidth="150"/>
-            <TableColumn fx:id="longueurColumn" text="Longueur (m)" prefWidth="150"/>
-            <TableColumn fx:id="vitesseColumn" text="Vitesse (noeuds)" prefWidth="150"/>
-        </columns>
-    </TableView>
+    <!-- Barre de menus -->
+    <MenuBar>
+        <Menu text="Fichier">
+            <MenuItem text="Réactualiser la connexion" onAction="#onHelloButtonClick"/>
+            <MenuItem text="Accueil" onAction="#handleHomeButton"/>
+            <MenuItem text="Générer un PDF" onAction="#handleGenerateButton"/>
+            <SeparatorMenuItem/>
+            <MenuItem text="Fermer" onAction="#handleClose"/>
+        </Menu>
+        <Menu text="Bateaux">
+            <MenuItem text="Liste des bateaux" onAction="#handleBateauxButton"/>
+        </Menu>
+        <Menu text="Équipements">
+            <MenuItem text="Ajouter un équipement" onAction="#handleAddEquipment"/>
+            <MenuItem text="Modifier un équipement" onAction="#handleEditEquipment"/>
+            <MenuItem text="Supprimer un équipement" onAction="#handleDeleteEquipment"/>
+        </Menu>
+        <Menu text="Aide">
+            <MenuItem text="À propos" onAction="#handleAbout"/>
+            <MenuItem text="Centre d'aide" onAction="#handleHelp"/>
+        </Menu>
+    </MenuBar>
 
-    <HBox spacing="20" prefHeight="250">
-        <VBox spacing="5" prefWidth="300">
-            <Label text="Équipements disponibles" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <ListView fx:id="equipementsList" prefHeight="200"/>
-        </VBox>
+    <!-- Contenu principal avec padding -->
+    <VBox spacing="10">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+
+        <Label text="Liste des Bateaux" styleClass="text-h1"/>
         
-        <VBox spacing="5" prefWidth="300">
-            <Label text="Équipements du bateau" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <ListView fx:id="bateauEquipementsList" prefHeight="200"/>
-        </VBox>
-    </HBox>
-    
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Ajouter les équipements au bateau" onAction="#handleAddEquipmentToBoat" 
-                styleClass="button-primary" prefWidth="200"/>
-        <Button text="Supprimer les équipements du bateau" onAction="#handleRemoveEquipmentFromBoat" 
-                styleClass="button-primary" prefWidth="200"/>
-    </HBox>
+        <!-- Barre de recherche -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Rechercher un bateau:"/>
+            <TextField fx:id="searchField" promptText="Entrez le nom d'un bateau..."/>
+        </HBox>
+        
+        <TableView fx:id="bateauxTable" prefHeight="200">
+            <columns>
+                <TableColumn fx:id="nomColumn" text="Nom du Bateau" prefWidth="200"/>
+                <TableColumn fx:id="marqueColumn" text="Marque" prefWidth="150"/>
+                <TableColumn fx:id="largeurColumn" text="Largeur (m)" prefWidth="150"/>
+                <TableColumn fx:id="longueurColumn" text="Longueur (m)" prefWidth="150"/>
+                <TableColumn fx:id="vitesseColumn" text="Vitesse (noeuds)" prefWidth="150"/>
+            </columns>
+        </TableView>
 
-</VBox> 
+        <HBox spacing="20" prefHeight="250">
+            <VBox spacing="5" prefWidth="300">
+                <Label text="Équipements disponibles" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <ListView fx:id="equipementsList" prefHeight="200"/>
+            </VBox>
+            
+            <VBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Ajouter" onAction="#handleAddEquipmentToBoat" 
+                        styleClass="button-primary" prefWidth="200"/>
+                <Button text="Supprimer" onAction="#handleRemoveEquipmentFromBoat" 
+                        styleClass="button-primary" prefWidth="200"/>
+            </VBox>
+
+            <VBox spacing="5" prefWidth="300">
+                <Label text="Équipements du bateau" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <ListView fx:id="bateauEquipementsList" prefHeight="200"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</VBox>

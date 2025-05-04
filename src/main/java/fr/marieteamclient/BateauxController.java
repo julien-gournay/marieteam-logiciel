@@ -2,11 +2,17 @@ package fr.marieteamclient;
 
 import fr.marieteamclient.models.Bateau;
 import fr.marieteamclient.models.Equipement;
+import fr.marieteamclient.database.DatabaseConnection;
+import fr.marieteamclient.utils.PDFGenerator;
+import fr.marieteamclient.constants.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,7 +22,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -50,6 +66,7 @@ public class BateauxController {
     private ObservableList<Equipement> bateauEquipementsData = FXCollections.observableArrayList();
     private FilteredList<Bateau> filteredData;
     private Bateau selectedBateau;
+    private Timeline connectionCheckTimeline;
 
     @FXML
     public void initialize() {
@@ -114,6 +131,26 @@ public class BateauxController {
         SortedList<Bateau> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(bateauxTable.comparatorProperty());
         bateauxTable.setItems(sortedData);
+
+        // Configurer la vérification périodique de la connexion
+        setupConnectionCheck();
+    }
+
+    private void setupConnectionCheck() {
+        connectionCheckTimeline = new Timeline(
+            new KeyFrame(Duration.millis(Constants.DATABASE_CHECK_INTERVAL), event -> checkDatabaseConnection())
+        );
+        connectionCheckTimeline.setCycleCount(Animation.INDEFINITE);
+        connectionCheckTimeline.play();
+    }
+
+    private void checkDatabaseConnection() {
+        String message = DatabaseConnection.testConnection();
+        boolean isConnected = message.contains("réussie");
+        
+        if (!isConnected) {
+            showAlert("Erreur de connexion", message, AlertType.ERROR);
+        }
     }
 
     private void loadAllEquipements() {
@@ -315,5 +352,198 @@ public class BateauxController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleHomeButton() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("home-view.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) bateauxTable.getScene().getWindow();
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            Scene scene = new Scene(root, currentWidth, currentHeight);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            
+            stage.setScene(scene);
+            stage.setWidth(currentWidth);
+            stage.setHeight(currentHeight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGenerateButton() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le PDF");
+            fileChooser.setInitialFileName("BateauVoyageur.pdf");
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+            );
+            
+            String userHome = System.getProperty("user.home");
+            File defaultDirectory = new File(userHome + "/Documents");
+            fileChooser.setInitialDirectory(defaultDirectory);
+            
+            File file = fileChooser.showSaveDialog(null);
+
+            if (file != null) {
+                final String filePath = file.getAbsolutePath() + 
+                    (file.getAbsolutePath().toLowerCase().endsWith(".pdf") ? "" : ".pdf");
+                
+                List<Bateau> bateaux = getBateauxFromDatabase();
+                List<Equipement> equipements = getEquipementsFromDatabase();
+
+                PDFGenerator.generateBateauxPDF(bateaux, filePath);
+                
+                Alert successAlert = new Alert(AlertType.INFORMATION);
+                successAlert.setTitle("Succès");
+                successAlert.setHeaderText("PDF généré avec succès");
+                successAlert.setContentText("Le fichier a été enregistré dans :\n" + filePath);
+                
+                ButtonType openButton = new ButtonType("Ouvrir");
+                ButtonType closeButton = new ButtonType("Fermer");
+                successAlert.getButtonTypes().setAll(openButton, closeButton);
+                
+                successAlert.showAndWait().ifPresent(response -> {
+                    if (response == openButton) {
+                        try {
+                            java.awt.Desktop.getDesktop().open(new File(filePath));
+                        } catch (Exception e) {
+                            Alert errorAlert = new Alert(AlertType.ERROR);
+                            errorAlert.setTitle("Erreur");
+                            errorAlert.setHeaderText("Impossible d'ouvrir le fichier");
+                            errorAlert.setContentText("Une erreur est survenue lors de l'ouverture du fichier.");
+                            errorAlert.showAndWait();
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Alert errorAlert = new Alert(AlertType.ERROR);
+            errorAlert.setTitle("Erreur");
+            errorAlert.setHeaderText("Erreur lors de la génération du PDF");
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleClose() {
+        Stage stage = (Stage) bateauxTable.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void handleAbout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("about-view.fxml"));
+            Parent aboutView = loader.load();
+            
+            Scene scene = bateauxTable.getScene();
+            scene.setRoot(aboutView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible de charger la vue about : " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void handleHelp() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Centre d'aide");
+        alert.setHeaderText("Aide");
+        alert.setContentText("Pour toute assistance, veuillez contacter le support technique.");
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void onHelloButtonClick() {
+        String message = DatabaseConnection.testConnection();
+        boolean isConnected = message.contains("réussie");
+        
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Test de connexion");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private List<Bateau> getBateauxFromDatabase() throws Exception {
+        List<Bateau> bateaux = new ArrayList<>();
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM bateau");
+
+        while (rs.next()) {
+            Bateau bateau = new Bateau(
+                rs.getInt("idBateau"),
+                rs.getInt("idCapitaine"),
+                rs.getString("nomBateau"),
+                rs.getString("marque"),
+                rs.getFloat("longueur"),
+                rs.getFloat("largeur"),
+                rs.getInt("vitesse")
+            );
+            bateaux.add(bateau);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+        return bateaux;
+    }
+
+    private List<Equipement> getEquipementsFromDatabase() throws Exception {
+        List<Equipement> equipements = new ArrayList<>();
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
+
+        while (rs.next()) {
+            Equipement equipement = new Equipement(
+                rs.getInt("idEquipement"),
+                rs.getString("labelle")
+            );
+            equipements.add(equipement);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+        return equipements;
+    }
+
+    @FXML
+    private void handleBateauxButton() {
+        // Cette méthode est vide car nous sommes déjà dans la vue des bateaux
+        // Elle est nécessaire pour éviter l'erreur de chargement FXML
+    }
+
+    @FXML
+    private void handleAddEquipment() {
+        // TODO: Implémenter l'ajout d'équipement
+        showAlert("Information", "Fonctionnalité à venir", AlertType.INFORMATION);
+    }
+
+    @FXML
+    private void handleEditEquipment() {
+        // TODO: Implémenter la modification d'équipement
+        showAlert("Information", "Fonctionnalité à venir", AlertType.INFORMATION);
+    }
+
+    @FXML
+    private void handleDeleteEquipment() {
+        // TODO: Implémenter la suppression d'équipement
+        showAlert("Information", "Fonctionnalité à venir", AlertType.INFORMATION);
     }
 } 

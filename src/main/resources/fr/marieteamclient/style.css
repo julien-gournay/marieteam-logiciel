@@ -202,3 +202,10 @@
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
+
+
+.text-h1 {
+    -fx-text-fill: #3a2afa;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
