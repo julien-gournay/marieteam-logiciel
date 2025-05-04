@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mysql:
@@ -14,7 +14,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./dump:/docker-entrypoint-initdb.d
+      - ./dump/marieteam.sql:/docker-entrypoint-initdb.d/marieteam.sql
     networks:
       - mynet
 
