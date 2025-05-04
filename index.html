@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarieTeam Client - Gestion des Bateaux</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #3A2AFA 0%, #CBDAFF 100%);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        .text-primary {
+            color: #3A2AFA;
+        }
+        .bg-primary {
+            background-color: #3A2AFA;
+        }
+        .border-primary {
+            border-color: #3A2AFA;
+        }
+        .text-secondary {
+            color: #CBDAFF;
+        }
+        .bg-secondary {
+            background-color: #CBDAFF;
+        }
+        .text-dark {
+            color: #000000;
+        }
+        .bg-dark {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body class="bg-secondary">
+    <!-- Navigation -->
+    <nav class="bg-dark border-gray-200 fixed w-full z-20 top-0">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap text-secondary">MarieTeam Client</span>
+            </a>
+            <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                <a href="https://github.com/votre-utilisateur/marieteam-logiciel" target="_blank" class="text-secondary bg-primary hover:bg-opacity-90 focus:ring-4 focus:outline-none focus:ring-primary font-medium rounded-lg text-sm px-4 py-2 text-center">
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-24 pb-16">
+        <div class="max-w-screen-xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="text-dark">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">MarieTeam Client</h1>
+                    <p class="text-xl mb-8">Application de gestion des bateaux et équipements pour MarieTeam</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="bg-dark text-secondary hover:bg-opacity-90 focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
+                            Télécharger
+                        </a>
+                        <a href="#features" class="text-dark border border-dark hover:bg-dark hover:text-secondary focus:ring-4 focus:ring-primary font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none">
+                            En savoir plus
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <img src="https://images.ctfassets.net/zmjc9gr9hbbf/2HIeWiVtEFb0B1tPNqQfd1/6e67348e2cfbaa27f168bd3942529b89/EXT36128_Armorique__1_.jpg?w=1980" alt="Bateau Armorique - MarieTeam" class="rounded-lg shadow-xl w-full h-auto object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-secondary">
+        <div class="max-w-screen-xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-dark">Fonctionnalités Principales</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card p-6 bg-white rounded-lg shadow-md">
+                    <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-dark">Gestion des Bateaux</h3>
+                    <p class="text-gray-600">Ajout, modification, suppression et consultation des bateaux de la flotte.</p>
+                </div>
+                <div class="feature-card p-6 bg-white rounded-lg shadow-md">
+                    <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-dark">Gestion des Équipements</h3>
+                    <p class="text-gray-600">Gestion complète des équipements embarqués sur les bateaux.</p>
+                </div>
+                <div class="feature-card p-6 bg-white rounded-lg shadow-md">
+                    <div class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-dark">Génération de PDF</h3>
+                    <p class="text-gray-600">Création automatique de brochures PDF pour les bateaux.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requirements Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-screen-xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-dark">Prérequis</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="p-6 bg-secondary rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">☕</div>
+                    <h3 class="text-lg font-semibold text-dark">Java JDK 17+</h3>
+                </div>
+                <div class="p-6 bg-secondary rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h3 class="text-lg font-semibold text-dark">Maven 3.8+</h3>
+                </div>
+                <div class="p-6 bg-secondary rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">🗄️</div>
+                    <h3 class="text-lg font-semibold text-dark">MySQL 8.0+</h3>
+                </div>
+                <div class="p-6 bg-secondary rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">📦</div>
+                    <h3 class="text-lg font-semibold text-dark">Git</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section class="py-16 bg-secondary">
+        <div class="max-w-screen-xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-dark">Configuration du Projet</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Base de données -->
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center text-primary">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                        </svg>
+                        Configuration de la Base de Données
+                    </h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                        <li>Créer une base de données MySQL nommée <code class="bg-secondary px-2 py-1 rounded text-dark">marieteam</code></li>
+                        <li>Configurer le fichier <code class="bg-secondary px-2 py-1 rounded text-dark">.properties</code> avec vos paramètres :
+                            <pre class="mt-2 bg-dark text-secondary p-4 rounded-lg overflow-x-auto">
+database.url=jdbc:mysql://localhost:3306/marieteam
+database.user=votre_utilisateur
+database.password=votre_mot_de_passe</pre>
+                        </li>
+                        <li>Exécuter le script SQL d'initialisation</li>
+                    </ol>
+                </div>
+
+                <!-- Environnement de développement -->
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center text-primary">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                        Configuration de l'Environnement
+                    </h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                        <li>Cloner le dépôt :
+                            <pre class="mt-2 bg-dark text-secondary p-4 rounded-lg overflow-x-auto">
+git clone https://github.com/votre-utilisateur/marieteam-logiciel.git
+cd marieteam-logiciel</pre>
+                        </li>
+                        <li>Installer les dépendances Maven :
+                            <pre class="mt-2 bg-dark text-secondary p-4 rounded-lg overflow-x-auto">
+mvn clean install</pre>
+                        </li>
+                        <li>Configurer JavaFX dans votre IDE</li>
+                        <li>Lancer l'application :
+                            <pre class="mt-2 bg-dark text-secondary p-4 rounded-lg overflow-x-auto">
+mvn javafx:run</pre>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Dépannage -->
+            <div class="mt-12 p-6 bg-white rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 flex items-center text-primary">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    Dépannage Courant
+                </h3>
+                <div class="space-y-4">
+                    <div class="bg-secondary p-4 rounded-lg">
+                        <h4 class="font-semibold text-primary">Erreur de connexion à la base de données</h4>
+                        <p class="text-dark">Vérifiez que :</p>
+                        <ul class="list-disc list-inside ml-4 text-dark">
+                            <li>MySQL est bien démarré</li>
+                            <li>Les identifiants dans le fichier .properties sont corrects</li>
+                            <li>La base de données marieteam existe</li>
+                        </ul>
+                    </div>
+                    <div class="bg-secondary p-4 rounded-lg">
+                        <h4 class="font-semibold text-primary">Erreur JavaFX</h4>
+                        <p class="text-dark">Assurez-vous que :</p>
+                        <ul class="list-disc list-inside ml-4 text-dark">
+                            <li>Java JDK 17+ est installé</li>
+                            <li>Le module JavaFX est correctement configuré</li>
+                            <li>Les dépendances Maven sont à jour</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-secondary py-8">
+        <div class="max-w-screen-xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">MarieTeam Client</h3>
+                    <p class="text-secondary">Application de gestion des bateaux et équipements pour MarieTeam.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Liens Utiles</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-secondary hover:text-primary">Télécharger</a></li>
+                        <li><a href="https://github.com/votre-utilisateur/marieteam-logiciel" class="text-secondary hover:text-primary">GitHub</a></li>
+                        <li><a href="#" class="text-secondary hover:text-primary">Documentation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2">
+                        <li class="text-secondary">Email : contact@marieteam.fr</li>
+                        <li class="text-secondary">Site web : marieteam.fr</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-primary mt-8 pt-8 text-center">
+                <p class="text-secondary">&copy; 2024 MarieTeam. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+</html> 
