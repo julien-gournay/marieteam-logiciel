@@ -471,7 +471,7 @@ public class BateauxController {
      */
     private List<Bateau> getBateauxFromDatabase() throws Exception {
         List<Bateau> bateaux = new ArrayList<>();
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM bateau");
 
@@ -505,8 +505,8 @@ public class BateauxController {
         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
-
-        while (rs.next()) {
+            
+            while (rs.next()) {
             Equipement equipement = new Equipement(
                 rs.getInt("idEquipement"),
                 rs.getString("labelle")
@@ -514,9 +514,9 @@ public class BateauxController {
             equipements.add(equipement);
         }
 
-        rs.close();
-        stmt.close();
-        conn.close();
+            rs.close();
+            stmt.close();
+            conn.close();
         return equipements;
     }
 
