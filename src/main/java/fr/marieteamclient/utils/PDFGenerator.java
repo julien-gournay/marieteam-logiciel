@@ -1,26 +1,30 @@
 package fr.marieteamclient.utils;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.layout.borders.SolidBorder;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.io.image.ImageDataFactory;
-import fr.marieteamclient.models.Bateau;
-import fr.marieteamclient.models.Equipement;
-import fr.marieteamclient.database.DatabaseConnection;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Div;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+
+import fr.marieteamclient.constants.Constants;
+import fr.marieteamclient.database.DatabaseConnection;
+import fr.marieteamclient.models.Bateau;
+import fr.marieteamclient.models.Equipement;
 
 /**
  * Classe utilitaire pour la génération de documents PDF.
@@ -37,7 +41,10 @@ public class PDFGenerator {
      */
     private static List<String> getEquipementsForBateau(int idBateau) throws SQLException {
         List<String> equipements = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection()) {
+        DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+        Connection conn = database.getConnection();
+        
+        try {
             String query = "SELECT e.labelle FROM equipement e " +
                           "JOIN possede p ON e.idEquipement = p.idEquipement " +
                           "WHERE p.idBateau = ?";
@@ -48,6 +55,11 @@ public class PDFGenerator {
             while (rs.next()) {
                 equipements.add(rs.getString("labelle"));
             }
+            
+            rs.close();
+            stmt.close();
+        } finally {
+            conn.close();
         }
         return equipements;
     }

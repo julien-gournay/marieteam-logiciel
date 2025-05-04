@@ -1,17 +1,14 @@
 package fr.marieteamclient;
 
+import java.io.IOException;
+
 import fr.marieteamclient.constants.Constants;
+import fr.marieteamclient.database.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.image.Image;
-import fr.marieteamclient.database.DatabaseConnection;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import java.io.IOException;
+import javafx.stage.Stage;
 
 /**
  * Classe principale de l'application MarieTeam.
@@ -32,10 +29,11 @@ public class GeneratorApplication extends Application {
     public void start(Stage stage) throws IOException {
         // Tester la connexion à la base de données
         try {
-            Connection conn = DatabaseConnection.getConnection();
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            database.getConnection();
             System.out.println("Connexion à la base de données réussie !");
-            conn.close();
-        } catch (SQLException e) {
+            database.closeConnection();
+        } catch (RuntimeException e) {
             System.err.println("Erreur de connexion à la base de données : " + e.getMessage());
         }
 
