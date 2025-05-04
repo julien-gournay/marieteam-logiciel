@@ -219,7 +219,8 @@ public class HomeController {
                 rs.getString("marque"),
                 rs.getFloat("longueur"),
                 rs.getFloat("largeur"),
-                rs.getInt("vitesse")
+                rs.getInt("vitesse"),
+                rs.getString("image")
             );
             bateaux.add(bateau);
         }

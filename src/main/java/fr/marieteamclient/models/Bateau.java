@@ -17,6 +17,7 @@ public class Bateau {
     private Float longueur;
     private Float largeur;
     private Integer vitesse;
+    private String image;
 
     /**
      * Constructeur de la classe Bateau.
@@ -28,8 +29,9 @@ public class Bateau {
      * @param longueur La longueur du bateau en mètres
      * @param largeur La largeur du bateau en mètres
      * @param vitesse La vitesse du bateau en nœuds
+     * @param image L'URL de l'image du bateau
      */
-    public Bateau(int idBateau, Integer idCapitaine, String nomBateau, String marque, Float longueur, Float largeur, Integer vitesse) {
+    public Bateau(int idBateau, Integer idCapitaine, String nomBateau, String marque, Float longueur, Float largeur, Integer vitesse, String image) {
         this.idBateau = idBateau;
         this.idCapitaine = idCapitaine;
         this.nomBateau = nomBateau;
@@ -37,6 +39,7 @@ public class Bateau {
         this.longueur = longueur;
         this.largeur = largeur;
         this.vitesse = vitesse;
+        this.image = image;
     }
 
     /**
@@ -89,6 +92,13 @@ public class Bateau {
     public Integer getVitesse() { return vitesse; }
 
     /**
+     * Retourne l'URL de l'image du bateau.
+     *
+     * @return L'URL de l'image du bateau
+     */
+    public String getImage() { return image; }
+
+    /**
      * Définit l'identifiant du bateau.
      *
      * @param idBateau Le nouvel identifiant du bateau
@@ -136,4 +146,11 @@ public class Bateau {
      * @param vitesse La nouvelle vitesse du bateau en nœuds
      */
     public void setVitesse(Integer vitesse) { this.vitesse = vitesse; }
+
+    /**
+     * Définit l'URL de l'image du bateau.
+     *
+     * @param image La nouvelle URL de l'image du bateau
+     */
+    public void setImage(String image) { this.image = image; }
 }

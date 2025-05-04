@@ -14,10 +14,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.SolidBorder;
-import com.itextpdf.layout.element.Div;
-import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
@@ -86,54 +83,64 @@ public class PDFGenerator {
             document.add(title);
 
             for (Bateau bateau : bateaux) {
+                // Création d'une nouvelle page pour chaque bateau
+                document.add(new AreaBreak());
+                
                 // Création d'un div pour chaque bateau
                 Div bateauDiv = new Div();
                 bateauDiv.setMarginBottom(30);
                 
                 try {
                     // Ajout de l'image du bateau si disponible
-                    String imagePath = "src/main/resources/fr/marieteamclient/images/" + bateau.getNomBateau().toLowerCase().replace(" ", "_") + ".jpg";
-                    Image img = new Image(ImageDataFactory.create(imagePath));
-                    img.setWidth(UnitValue.createPercentValue(80));
-                    img.setMarginBottom(10);
-                    bateauDiv.add(img);
+                    if (bateau.getImage() != null && !bateau.getImage().isEmpty()) {
+                        Image img = new Image(ImageDataFactory.create(bateau.getImage()));
+                        img.setWidth(UnitValue.createPercentValue(80));
+                        img.setHorizontalAlignment(com.itextpdf.layout.properties.HorizontalAlignment.CENTER);
+                        img.setMarginBottom(10);
+                        bateauDiv.add(img);
+                    }
                 } catch (Exception e) {
-                    System.err.println("Image non trouvée pour le bateau: " + bateau.getNomBateau());
+                    System.err.println("Erreur lors du chargement de l'image pour le bateau: " + bateau.getNomBateau());
+                    e.printStackTrace();
                 }
 
                 // Informations du bateau
                 bateauDiv.add(new Paragraph("Nom du bateau : " + bateau.getNomBateau())
                     .setFontSize(14)
                     .setBold()
+                    .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(5));
 
+                bateauDiv.add(new Paragraph("Marque : " + bateau.getMarque())
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(2));
                 bateauDiv.add(new Paragraph("Longueur : " + bateau.getLongueur() + " mètres")
+                    .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(2));
                 bateauDiv.add(new Paragraph("Largeur : " + bateau.getLargeur() + " mètres")
+                    .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(2));
                 bateauDiv.add(new Paragraph("Vitesse : " + bateau.getVitesse() + " noeuds")
+                    .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(10));
 
                 // Liste des équipements
                 bateauDiv.add(new Paragraph("Liste des équipements du bateau :")
                     .setBold()
+                    .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(5));
 
                 try {
                     List<String> equipements = getEquipementsForBateau(bateau.getIdBateau());
                     for (String equipement : equipements) {
                         bateauDiv.add(new Paragraph("- " + equipement)
-                            .setMarginLeft(20)
+                            .setTextAlignment(TextAlignment.CENTER)
                             .setMarginBottom(2));
                     }
                 } catch (SQLException e) {
                     System.err.println("Erreur lors de la récupération des équipements pour le bateau " + bateau.getNomBateau());
                     e.printStackTrace();
                 }
-
-                // Ajout d'une ligne de séparation
-                bateauDiv.add(new Paragraph("").setBorderBottom(new SolidBorder(1))
-                    .setMarginTop(20));
 
                 document.add(bateauDiv);
             }

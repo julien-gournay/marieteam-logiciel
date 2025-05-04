@@ -408,7 +408,8 @@ public class BateauxController {
               rs.getString("marque"),
               rs.getFloat("longueur"),
               rs.getFloat("largeur"),
-              rs.getInt("vitesse")
+              rs.getInt("vitesse"),
+              rs.getString("image")
           );
           bateauxData.add(bateau);
         }
@@ -508,7 +509,8 @@ public class BateauxController {
             rs.getString("marque"),
             rs.getFloat("longueur"),
             rs.getFloat("largeur"),
-            rs.getInt("vitesse")
+            rs.getInt("vitesse"),
+            rs.getString("image")
         );
         bateaux.add(bateau);
       }
