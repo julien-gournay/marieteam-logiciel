@@ -1,0 +1,6 @@
+module:fr.marieteamclient
+fr.marieteamclient
+fr.marieteamclient.constants
+fr.marieteamclient.database
+fr.marieteamclient.models
+fr.marieteamclient.utils

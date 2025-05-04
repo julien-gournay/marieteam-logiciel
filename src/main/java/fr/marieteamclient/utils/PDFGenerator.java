@@ -22,8 +22,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Classe utilitaire pour la génération de documents PDF.
+ * Permet de créer des rapports PDF pour les bateaux et leurs équipements.
+ */
 public class PDFGenerator {
     
+    /**
+     * Récupère la liste des équipements associés à un bateau.
+     *
+     * @param idBateau L'identifiant du bateau
+     * @return Une liste des libellés des équipements du bateau
+     * @throws SQLException Si une erreur survient lors de l'accès à la base de données
+     */
     private static List<String> getEquipementsForBateau(int idBateau) throws SQLException {
         List<String> equipements = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection()) {
@@ -41,6 +52,13 @@ public class PDFGenerator {
         return equipements;
     }
     
+    /**
+     * Génère un PDF contenant les informations des bateaux et leurs équipements.
+     * Crée un document PDF avec des images, des descriptions et des listes d'équipements.
+     *
+     * @param bateaux La liste des bateaux à inclure dans le PDF
+     * @param filePath Le chemin où sauvegarder le fichier PDF
+     */
     public static void generateBateauxPDF(List<Bateau> bateaux, String filePath) {
         try {
             PdfWriter writer = new PdfWriter(filePath);
@@ -114,6 +132,14 @@ public class PDFGenerator {
         }
     }
 
+    /**
+     * Génère un PDF contenant la liste des équipements.
+     * Crée un document PDF avec un tableau des équipements.
+     *
+     * @param equipements La liste des équipements à inclure dans le PDF
+     * @param filePath Le chemin où sauvegarder le fichier PDF
+     * @throws IOException Si une erreur survient lors de la création du PDF
+     */
     public static void generateEquipementsPDF(List<Equipement> equipements, String filePath) throws IOException {
         // Création du document PDF
         PdfWriter writer = new PdfWriter(filePath);
