@@ -13,7 +13,21 @@ import java.sql.SQLException;
 
 import java.io.IOException;
 
+/**
+ * Classe principale de l'application MarieTeam.
+ * Initialise et lance l'interface graphique de l'application.
+ * Gère la connexion à la base de données et la configuration de la fenêtre principale.
+ */
 public class GeneratorApplication extends Application {
+    
+    /**
+     * Méthode principale de démarrage de l'application JavaFX.
+     * Configure la fenêtre principale, teste la connexion à la base de données
+     * et initialise l'interface utilisateur.
+     *
+     * @param stage La fenêtre principale de l'application
+     * @throws IOException Si une erreur survient lors du chargement de l'interface
+     */
     @Override
     public void start(Stage stage) throws IOException {
         // Tester la connexion à la base de données
@@ -40,6 +54,12 @@ public class GeneratorApplication extends Application {
         stage.show();
     }
 
+    /**
+     * Point d'entrée de l'application.
+     * Lance l'application JavaFX.
+     *
+     * @param args Les arguments de la ligne de commande (non utilisés)
+     */
     public static void main(String[] args) {
         launch();
     }

@@ -12,6 +12,10 @@ import javafx.scene.Scene;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/**
+ * Contrôleur pour le formulaire d'ajout d'équipement.
+ * Gère l'interface utilisateur permettant d'ajouter un nouvel équipement à la base de données.
+ */
 public class EquipmentFormController {
     @FXML
     private TextField equipmentName;
@@ -20,10 +24,21 @@ public class EquipmentFormController {
 
     private HomeController mainController;
 
+    /**
+     * Définit le contrôleur principal de l'application.
+     * Permet la communication entre les contrôleurs.
+     *
+     * @param controller Le contrôleur principal de l'application
+     */
     public void setMainController(HomeController controller) {
         this.mainController = controller;
     }
 
+    /**
+     * Gère l'événement de sauvegarde d'un nouvel équipement.
+     * Vérifie la validité des données, enregistre l'équipement dans la base de données
+     * et affiche un message de confirmation.
+     */
     @FXML
     private void handleSave() {
         try {
@@ -53,6 +68,10 @@ public class EquipmentFormController {
         }
     }
 
+    /**
+     * Gère l'événement d'annulation.
+     * Ferme la fenêtre du formulaire sans sauvegarder.
+     */
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) saveButton.getScene().getWindow();

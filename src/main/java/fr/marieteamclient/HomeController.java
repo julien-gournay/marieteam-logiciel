@@ -31,6 +31,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contrôleur principal de l'application, gérant la vue d'accueil et les interactions principales.
+ * Cette classe gère :
+ * - La vérification de la connexion à la base de données
+ * - La génération de PDF
+ * - La navigation entre les différentes vues
+ * - La gestion des équipements
+ */
 public class HomeController {
 
     @FXML
@@ -50,6 +58,10 @@ public class HomeController {
 
     private Timeline connectionCheckTimeline;
 
+    /**
+     * Initialise le contrôleur et configure la vérification périodique de la connexion.
+     * Cette méthode est appelée automatiquement par JavaFX après le chargement du FXML.
+     */
     @FXML
     public void initialize() {
         // Tester la connexion à la base de données immédiatement
@@ -59,6 +71,10 @@ public class HomeController {
         setupConnectionCheck();
     }
 
+    /**
+     * Configure la vérification périodique de la connexion à la base de données.
+     * La vérification est effectuée à intervalles réguliers définis dans Constants.DATABASE_CHECK_INTERVAL.
+     */
     private void setupConnectionCheck() {
         connectionCheckTimeline = new Timeline(
             new KeyFrame(Duration.millis(Constants.DATABASE_CHECK_INTERVAL), event -> checkDatabaseConnection())
@@ -67,6 +83,9 @@ public class HomeController {
         connectionCheckTimeline.play();
     }
 
+    /**
+     * Vérifie l'état de la connexion à la base de données et met à jour l'interface utilisateur en conséquence.
+     */
     private void checkDatabaseConnection() {
         String message = DatabaseConnection.testConnection();
         boolean isConnected = message.contains("réussie");
@@ -81,11 +100,19 @@ public class HomeController {
         statusLabel.setText(message);
     }
 
+    /**
+     * Définit la fenêtre principale de l'application.
+     * @param stage La fenêtre principale de l'application
+     */
     public void setStage(Stage stage) {
-        stage.setMinHeight(700);
-        stage.setMinWidth(800);
+        stage.setMinHeight(Constants.APP_HEIGHT);
+        stage.setMinWidth(Constants.APP_WIDTH);
     }
 
+    /**
+     * Met à jour l'indicateur visuel de l'état de la connexion.
+     * @param isConnected État de la connexion (true si connecté, false sinon)
+     */
     private void updateConnectionStatus(boolean isConnected) {
         connectionStatusIndicator.getStyleClass().clear();
         if (isConnected) {
@@ -95,7 +122,10 @@ public class HomeController {
         }
     }
 
-    // Méthode appelée lorsque le bouton "Générer un pdf" est cliqué
+    /**
+     * Gère l'action de génération du PDF.
+     * Permet à l'utilisateur de choisir l'emplacement de sauvegarde et génère le PDF des bateaux.
+     */
     @FXML
     public void handleGenerateButton() {
         try {
@@ -161,6 +191,11 @@ public class HomeController {
         }
     }
 
+    /**
+     * Récupère la liste des bateaux depuis la base de données.
+     * @return Liste des bateaux
+     * @throws Exception En cas d'erreur lors de la récupération des données
+     */
     private List<Bateau> getBateauxFromDatabase() throws Exception {
         List<Bateau> bateaux = new ArrayList<>();
         Connection conn = DatabaseConnection.getConnection();
@@ -186,6 +221,11 @@ public class HomeController {
         return bateaux;
     }
 
+    /**
+     * Récupère la liste des équipements depuis la base de données.
+     * @return Liste des équipements
+     * @throws Exception En cas d'erreur lors de la récupération des données
+     */
     private List<Equipement> getEquipementsFromDatabase() throws Exception {
         List<Equipement> equipements = new ArrayList<>();
         Connection conn = DatabaseConnection.getConnection();
@@ -206,7 +246,10 @@ public class HomeController {
         return equipements;
     }
 
-    // Méthode appelée lorsque le bouton "Tester la connexion" est cliqué
+    /**
+     * Gère l'action de test de la connexion.
+     * Vérifie l'état de la connexion à la base de données et affiche le résultat.
+     */
     @FXML
     public void onHelloButtonClick() {
         String message = DatabaseConnection.testConnection();
@@ -222,7 +265,10 @@ public class HomeController {
         statusLabel.setText(message);
     }
 
-    // Méthode appelée lorsque le bouton "À propos" est cliqué
+    /**
+     * Gère l'action d'affichage de la vue "À propos".
+     * Charge et affiche la vue about-view.fxml.
+     */
     @FXML
     public void handleAbout() {
         try {
@@ -243,6 +289,10 @@ public class HomeController {
         }
     }
 
+    /**
+     * Gère l'action de retour à la page d'accueil.
+     * Recharge la vue d'accueil en préservant la taille de la fenêtre.
+     */
     @FXML
     private void handleHomeButton() {
         try {
@@ -268,6 +318,10 @@ public class HomeController {
         }
     }
 
+    /**
+     * Gère l'action d'affichage de la vue des bateaux.
+     * Charge et affiche la vue bateaux.fxml.
+     */
     @FXML
     private void handleBateauxButton() {
         try {
@@ -298,6 +352,10 @@ public class HomeController {
         }
     }
 
+    /**
+     * Gère l'action d'ajout d'un équipement.
+     * Ouvre une nouvelle fenêtre pour l'ajout d'équipement.
+     */
     @FXML
     private void handleAddEquipment() {
         try {
@@ -316,6 +374,10 @@ public class HomeController {
         }
     }
 
+    /**
+     * Gère l'action de modification d'un équipement.
+     * Ouvre une nouvelle fenêtre pour la modification d'équipement.
+     */
     @FXML
     private void handleEditEquipment() {
         try {
@@ -334,6 +396,10 @@ public class HomeController {
         }
     }
 
+    /**
+     * Gère l'action de suppression d'un équipement.
+     * Ouvre une nouvelle fenêtre pour la suppression d'équipement.
+     */
     @FXML
     private void handleDeleteEquipment() {
         try {
@@ -352,6 +418,11 @@ public class HomeController {
         }
     }
 
+    /**
+     * Affiche une alerte concernant la gestion des équipements.
+     * @param message Le message à afficher
+     * @param type Le type d'alerte (success, error, info)
+     */
     public void showEquipmentAlert(String message, String type) {
         equipmentStatusLabel.setText(message);
         equipmentStatusLabel.getStyleClass().clear();
@@ -374,12 +445,19 @@ public class HomeController {
         equipmentStatusLabel.setText(icon + message);
     }
 
+    /**
+     * Gère l'action de fermeture de l'application.
+     */
     @FXML
     private void handleClose() {
         Stage stage = (Stage) mainContainer.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Gère l'action d'affichage du centre d'aide.
+     * Charge et affiche la vue help-view.fxml.
+     */
     @FXML
     private void handleHelp() {
         try {

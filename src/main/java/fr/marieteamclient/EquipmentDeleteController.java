@@ -14,6 +14,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+/**
+ * Contrôleur pour la suppression des équipements.
+ * Gère l'interface utilisateur permettant de supprimer les équipements existants.
+ */
 public class EquipmentDeleteController {
     @FXML
     private ComboBox<Equipement> equipmentSelector;
@@ -23,15 +27,30 @@ public class EquipmentDeleteController {
     private ObservableList<Equipement> equipments = FXCollections.observableArrayList();
     private HomeController mainController;
 
+    /**
+     * Définit le contrôleur principal de l'application.
+     * Permet la communication entre les contrôleurs.
+     *
+     * @param controller Le contrôleur principal de l'application
+     */
     public void setMainController(HomeController controller) {
         this.mainController = controller;
     }
 
+    /**
+     * Initialise le contrôleur.
+     * Cette méthode est appelée automatiquement après le chargement du fichier FXML.
+     * Charge la liste des équipements depuis la base de données.
+     */
     @FXML
     public void initialize() {
         loadEquipments();
     }
 
+    /**
+     * Charge la liste des équipements depuis la base de données.
+     * Configure également le ComboBox pour afficher les équipements.
+     */
     private void loadEquipments() {
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -67,6 +86,11 @@ public class EquipmentDeleteController {
         }
     }
 
+    /**
+     * Gère l'événement de suppression d'un équipement.
+     * Vérifie qu'un équipement est sélectionné, le supprime de la base de données
+     * et affiche un message de confirmation.
+     */
     @FXML
     private void handleDelete() {
         try {
@@ -96,6 +120,10 @@ public class EquipmentDeleteController {
         }
     }
 
+    /**
+     * Gère l'événement d'annulation.
+     * Ferme la fenêtre de suppression sans effectuer de modifications.
+     */
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) deleteButton.getScene().getWindow();

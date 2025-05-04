@@ -9,12 +9,21 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
+/**
+ * Contrôleur pour la vue "À propos" de l'application.
+ * Gère l'affichage des informations sur l'application et la navigation.
+ */
 public class AboutController {
 
     @FXML
     private VBox mainContainer;
 
-    // Méthode appelée lorsque le bouton "Retour" est cliqué
+    /**
+     * Gère l'événement de clic sur le bouton "Retour".
+     * Recharge la vue d'accueil et remplace le contenu de la fenêtre principale.
+     * 
+     * @throws IOException Si une erreur survient lors du chargement de la vue d'accueil
+     */
     @FXML
     private void handleBackButtonClick() {
         try {

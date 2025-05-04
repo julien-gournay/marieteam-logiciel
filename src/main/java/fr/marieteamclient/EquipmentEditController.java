@@ -15,6 +15,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+/**
+ * Contrôleur pour la modification des équipements.
+ * Gère l'interface utilisateur permettant de modifier les équipements existants.
+ */
 public class EquipmentEditController {
     @FXML
     private ComboBox<Equipement> equipmentSelector;
@@ -26,15 +30,30 @@ public class EquipmentEditController {
     private ObservableList<Equipement> equipments = FXCollections.observableArrayList();
     private HomeController mainController;
 
+    /**
+     * Définit le contrôleur principal de l'application.
+     * Permet la communication entre les contrôleurs.
+     *
+     * @param controller Le contrôleur principal de l'application
+     */
     public void setMainController(HomeController controller) {
         this.mainController = controller;
     }
 
+    /**
+     * Initialise le contrôleur.
+     * Cette méthode est appelée automatiquement après le chargement du fichier FXML.
+     * Charge la liste des équipements depuis la base de données.
+     */
     @FXML
     public void initialize() {
         loadEquipments();
     }
 
+    /**
+     * Charge la liste des équipements depuis la base de données.
+     * Configure également le ComboBox pour afficher les équipements.
+     */
     private void loadEquipments() {
         try {
             Connection conn = DatabaseConnection.getConnection();
@@ -70,6 +89,11 @@ public class EquipmentEditController {
         }
     }
 
+    /**
+     * Gère l'événement de mise à jour d'un équipement.
+     * Vérifie la validité des données, met à jour l'équipement dans la base de données
+     * et affiche un message de confirmation.
+     */
     @FXML
     private void handleUpdate() {
         try {
@@ -105,6 +129,10 @@ public class EquipmentEditController {
         }
     }
 
+    /**
+     * Gère l'événement d'annulation.
+     * Ferme la fenêtre de modification sans sauvegarder les changements.
+     */
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) updateButton.getScene().getWindow();

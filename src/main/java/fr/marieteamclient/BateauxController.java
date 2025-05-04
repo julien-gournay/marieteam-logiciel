@@ -41,6 +41,11 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contrôleur principal pour la gestion des bateaux et de leurs équipements.
+ * Gère l'affichage, la recherche, l'ajout et la suppression des équipements des bateaux.
+ * Permet également la génération de rapports PDF et la vérification de la connexion à la base de données.
+ */
 public class BateauxController {
     @FXML
     private TableView<Bateau> bateauxTable;
@@ -68,6 +73,11 @@ public class BateauxController {
     private Bateau selectedBateau;
     private Timeline connectionCheckTimeline;
 
+    /**
+     * Initialise le contrôleur.
+     * Configure les colonnes de la table, les listes d'équipements,
+     * charge les données initiales et configure la recherche.
+     */
     @FXML
     public void initialize() {
         // Configuration des colonnes de la table
@@ -136,6 +146,10 @@ public class BateauxController {
         setupConnectionCheck();
     }
 
+    /**
+     * Configure la vérification périodique de la connexion à la base de données.
+     * Utilise une Timeline pour vérifier la connexion à intervalles réguliers.
+     */
     private void setupConnectionCheck() {
         connectionCheckTimeline = new Timeline(
             new KeyFrame(Duration.millis(Constants.DATABASE_CHECK_INTERVAL), event -> checkDatabaseConnection())
@@ -144,6 +158,10 @@ public class BateauxController {
         connectionCheckTimeline.play();
     }
 
+    /**
+     * Vérifie l'état de la connexion à la base de données.
+     * Affiche une alerte en cas d'erreur de connexion.
+     */
     private void checkDatabaseConnection() {
         String message = DatabaseConnection.testConnection();
         boolean isConnected = message.contains("réussie");
@@ -153,6 +171,10 @@ public class BateauxController {
         }
     }
 
+    /**
+     * Charge tous les équipements disponibles depuis la base de données.
+     * Met à jour la liste des équipements disponibles dans l'interface.
+     */
     private void loadAllEquipements() {
         equipementsData.clear();
         try {
@@ -178,6 +200,12 @@ public class BateauxController {
         }
     }
 
+    /**
+     * Charge les équipements d'un bateau spécifique.
+     * Met à jour la liste des équipements du bateau sélectionné.
+     *
+     * @param idBateau L'identifiant du bateau dont on veut charger les équipements
+     */
     private void loadBateauEquipements(int idBateau) {
         bateauEquipementsData.clear();
         try {
@@ -206,6 +234,10 @@ public class BateauxController {
         }
     }
 
+    /**
+     * Gère l'ajout d'équipements au bateau sélectionné.
+     * Vérifie les sélections et met à jour la base de données.
+     */
     @FXML
     private void handleAddEquipmentToBoat() {
         if (selectedBateau == null) {
@@ -276,6 +308,10 @@ public class BateauxController {
         }
     }
 
+    /**
+     * Gère la suppression d'équipements du bateau sélectionné.
+     * Vérifie la sélection et met à jour la base de données.
+     */
     @FXML
     private void handleRemoveEquipmentFromBoat() {
         if (selectedBateau == null) {
@@ -319,6 +355,13 @@ public class BateauxController {
         }
     }
 
+    /**
+     * Affiche une boîte de dialogue d'alerte.
+     *
+     * @param title Le titre de l'alerte
+     * @param content Le contenu du message
+     * @param type Le type d'alerte
+     */
     private void showAlert(String title, String content, AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -327,6 +370,10 @@ public class BateauxController {
         alert.showAndWait();
     }
 
+    /**
+     * Charge la liste des bateaux depuis la base de données.
+     * Met à jour la table des bateaux dans l'interface.
+     */
     private void loadBateaux() {
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
@@ -354,27 +401,10 @@ public class BateauxController {
         }
     }
 
-    @FXML
-    private void handleHomeButton() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("home-view.fxml"));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) bateauxTable.getScene().getWindow();
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
-            
-            Scene scene = new Scene(root, currentWidth, currentHeight);
-            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-            
-            stage.setScene(scene);
-            stage.setWidth(currentWidth);
-            stage.setHeight(currentHeight);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Gère la génération du rapport PDF pour les bateaux et leurs équipements.
+     * Crée un fichier PDF contenant les informations sur les bateaux.
+     */
     @FXML
     private void handleGenerateButton() {
         try {
@@ -433,6 +463,84 @@ public class BateauxController {
         }
     }
 
+    /**
+     * Récupère la liste des bateaux depuis la base de données.
+     *
+     * @return Une liste de bateaux
+     * @throws Exception Si une erreur survient lors de la récupération des données
+     */
+    private List<Bateau> getBateauxFromDatabase() throws Exception {
+        List<Bateau> bateaux = new ArrayList<>();
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM bateau");
+
+        while (rs.next()) {
+            Bateau bateau = new Bateau(
+                rs.getInt("idBateau"),
+                rs.getInt("idCapitaine"),
+                rs.getString("nomBateau"),
+                rs.getString("marque"),
+                rs.getFloat("longueur"),
+                rs.getFloat("largeur"),
+                rs.getInt("vitesse")
+            );
+            bateaux.add(bateau);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+        return bateaux;
+    }
+
+    /**
+     * Récupère la liste des équipements depuis la base de données.
+     *
+     * @return Une liste d'équipements
+     * @throws Exception Si une erreur survient lors de la récupération des données
+     */
+    private List<Equipement> getEquipementsFromDatabase() throws Exception {
+        List<Equipement> equipements = new ArrayList<>();
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
+
+        while (rs.next()) {
+            Equipement equipement = new Equipement(
+                rs.getInt("idEquipement"),
+                rs.getString("labelle")
+            );
+            equipements.add(equipement);
+        }
+
+        rs.close();
+        stmt.close();
+        conn.close();
+        return equipements;
+    }
+
+    @FXML
+    private void handleHomeButton() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("home-view.fxml"));
+            Parent root = loader.load();
+            
+            Stage stage = (Stage) bateauxTable.getScene().getWindow();
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            
+            Scene scene = new Scene(root, currentWidth, currentHeight);
+            scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            
+            stage.setScene(scene);
+            stage.setWidth(currentWidth);
+            stage.setHeight(currentHeight);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     private void handleClose() {
         Stage stage = (Stage) bateauxTable.getScene().getWindow();
@@ -476,51 +584,6 @@ public class BateauxController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private List<Bateau> getBateauxFromDatabase() throws Exception {
-        List<Bateau> bateaux = new ArrayList<>();
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM bateau");
-
-        while (rs.next()) {
-            Bateau bateau = new Bateau(
-                rs.getInt("idBateau"),
-                rs.getInt("idCapitaine"),
-                rs.getString("nomBateau"),
-                rs.getString("marque"),
-                rs.getFloat("longueur"),
-                rs.getFloat("largeur"),
-                rs.getInt("vitesse")
-            );
-            bateaux.add(bateau);
-        }
-
-        rs.close();
-        stmt.close();
-        conn.close();
-        return bateaux;
-    }
-
-    private List<Equipement> getEquipementsFromDatabase() throws Exception {
-        List<Equipement> equipements = new ArrayList<>();
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/marieteam", "root", "");
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
-
-        while (rs.next()) {
-            Equipement equipement = new Equipement(
-                rs.getInt("idEquipement"),
-                rs.getString("labelle")
-            );
-            equipements.add(equipement);
-        }
-
-        rs.close();
-        stmt.close();
-        conn.close();
-        return equipements;
     }
 
     @FXML
