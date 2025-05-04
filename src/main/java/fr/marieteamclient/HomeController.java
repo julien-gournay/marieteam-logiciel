@@ -1,28 +1,5 @@
 package fr.marieteamclient;
 
-import fr.marieteamclient.database.DatabaseConnection;
-import fr.marieteamclient.models.Bateau;
-import fr.marieteamclient.models.Equipement;
-import fr.marieteamclient.utils.PDFGenerator;
-import fr.marieteamclient.constants.Constants;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.stage.FileChooser;
-import javafx.scene.shape.Circle;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -30,6 +7,29 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.marieteamclient.constants.Constants;
+import fr.marieteamclient.database.DatabaseConnection;
+import fr.marieteamclient.models.Bateau;
+import fr.marieteamclient.models.Equipement;
+import fr.marieteamclient.utils.PDFGenerator;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Contrôleur principal de l'application, gérant la vue d'accueil et les interactions principales.
@@ -87,17 +87,25 @@ public class HomeController {
      * Vérifie l'état de la connexion à la base de données et met à jour l'interface utilisateur en conséquence.
      */
     private void checkDatabaseConnection() {
-        String message = DatabaseConnection.testConnection();
-        boolean isConnected = message.contains("réussie");
-        
-        updateConnectionStatus(isConnected);
-        statusLabel.getStyleClass().clear();
-        if (isConnected) {
+        try {
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            database.getConnection();
+            String message = "Connexion à la base de données réussie !";
+            boolean isConnected = true;
+            
+            updateConnectionStatus(isConnected);
+            statusLabel.getStyleClass().clear();
             statusLabel.getStyleClass().add("success");
-        } else {
+            statusLabel.setText(message);
+        } catch (Exception e) {
+            String message = "Erreur de connexion à la base de données : " + e.getMessage();
+            boolean isConnected = false;
+            
+            updateConnectionStatus(isConnected);
+            statusLabel.getStyleClass().clear();
             statusLabel.getStyleClass().add("error");
+            statusLabel.setText(message);
         }
-        statusLabel.setText(message);
     }
 
     /**
@@ -198,7 +206,8 @@ public class HomeController {
      */
     private List<Bateau> getBateauxFromDatabase() throws Exception {
         List<Bateau> bateaux = new ArrayList<>();
-        Connection conn = DatabaseConnection.getConnection();
+        DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+        Connection conn = database.getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM bateau");
 
@@ -228,7 +237,8 @@ public class HomeController {
      */
     private List<Equipement> getEquipementsFromDatabase() throws Exception {
         List<Equipement> equipements = new ArrayList<>();
-        Connection conn = DatabaseConnection.getConnection();
+        DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+        Connection conn = database.getConnection();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
 
@@ -252,17 +262,25 @@ public class HomeController {
      */
     @FXML
     public void onHelloButtonClick() {
-        String message = DatabaseConnection.testConnection();
-        boolean isConnected = message.contains("réussie");
-        
-        updateConnectionStatus(isConnected);
-        statusLabel.getStyleClass().clear();
-        if (isConnected) {
+        try {
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            database.getConnection();
+            String message = "Connexion à la base de données réussie !";
+            boolean isConnected = true;
+            
+            updateConnectionStatus(isConnected);
+            statusLabel.getStyleClass().clear();
             statusLabel.getStyleClass().add("success");
-        } else {
+            statusLabel.setText(message);
+        } catch (Exception e) {
+            String message = "Erreur de connexion à la base de données : " + e.getMessage();
+            boolean isConnected = false;
+            
+            updateConnectionStatus(isConnected);
+            statusLabel.getStyleClass().clear();
             statusLabel.getStyleClass().add("error");
+            statusLabel.setText(message);
         }
-        statusLabel.setText(message);
     }
 
     /**

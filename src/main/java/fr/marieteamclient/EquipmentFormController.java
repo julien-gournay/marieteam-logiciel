@@ -1,16 +1,14 @@
 package fr.marieteamclient;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import fr.marieteamclient.constants.Constants;
+import fr.marieteamclient.database.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import fr.marieteamclient.database.DatabaseConnection;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  * Contrôleur pour le formulaire d'ajout d'équipement.
@@ -47,7 +45,8 @@ public class EquipmentFormController {
                 return;
             }
 
-            Connection conn = DatabaseConnection.getConnection();
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            Connection conn = database.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
                 "INSERT INTO equipement (labelle) VALUES (?)"
             );

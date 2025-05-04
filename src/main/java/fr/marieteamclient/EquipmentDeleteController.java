@@ -1,18 +1,19 @@
 package fr.marieteamclient;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.stage.Stage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import fr.marieteamclient.models.Equipement;
-import fr.marieteamclient.database.DatabaseConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import fr.marieteamclient.constants.Constants;
+import fr.marieteamclient.database.DatabaseConnection;
+import fr.marieteamclient.models.Equipement;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 
 /**
  * Contrôleur pour la suppression des équipements.
@@ -53,34 +54,39 @@ public class EquipmentDeleteController {
      */
     private void loadEquipments() {
         try {
-            Connection conn = DatabaseConnection.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            Connection conn = database.getConnection();
+            
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
 
-            while (rs.next()) {
-                Equipement equipement = new Equipement(
-                    rs.getInt("idEquipement"),
-                    rs.getString("labelle")
-                );
-                equipments.add(equipement);
+                while (rs.next()) {
+                    Equipement equipement = new Equipement(
+                        rs.getInt("idEquipement"),
+                        rs.getString("labelle")
+                    );
+                    equipments.add(equipement);
+                }
+
+                equipmentSelector.setItems(equipments);
+                equipmentSelector.setConverter(new javafx.util.StringConverter<Equipement>() {
+                    @Override
+                    public String toString(Equipement equipement) {
+                        return equipement.getLabelle();
+                    }
+
+                    @Override
+                    public Equipement fromString(String string) {
+                        return null;
+                    }
+                });
+
+                rs.close();
+                stmt.close();
+            } finally {
+                conn.close();
             }
-
-            equipmentSelector.setItems(equipments);
-            equipmentSelector.setConverter(new javafx.util.StringConverter<Equipement>() {
-                @Override
-                public String toString(Equipement equipement) {
-                    return equipement.getLabelle();
-                }
-
-                @Override
-                public Equipement fromString(String string) {
-                    return null;
-                }
-            });
-
-            rs.close();
-            stmt.close();
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,21 +105,25 @@ public class EquipmentDeleteController {
                 return;
             }
 
-            Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
-                "DELETE FROM equipement WHERE idEquipement = ?"
-            );
-            stmt.setInt(1, equipmentSelector.getValue().getIdEquipement());
-            stmt.executeUpdate();
-
-            stmt.close();
-            conn.close();
-
-            mainController.showEquipmentAlert("Équipement supprimé avec succès", "success");
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            Connection conn = database.getConnection();
             
-            // Fermer la fenêtre
-            Stage stage = (Stage) deleteButton.getScene().getWindow();
-            stage.close();
+            try {
+                PreparedStatement stmt = conn.prepareStatement(
+                    "DELETE FROM equipement WHERE idEquipement = ?"
+                );
+                stmt.setInt(1, equipmentSelector.getValue().getIdEquipement());
+                stmt.executeUpdate();
+                stmt.close();
+                
+                mainController.showEquipmentAlert("Équipement supprimé avec succès", "success");
+                
+                // Fermer la fenêtre
+                Stage stage = (Stage) deleteButton.getScene().getWindow();
+                stage.close();
+            } finally {
+                conn.close();
+            }
         } catch (Exception e) {
             mainController.showEquipmentAlert("Erreur lors de la suppression de l'équipement: " + e.getMessage(), "error");
             e.printStackTrace();

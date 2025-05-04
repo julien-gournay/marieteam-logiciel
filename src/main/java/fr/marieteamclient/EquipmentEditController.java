@@ -1,19 +1,20 @@
 package fr.marieteamclient;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import fr.marieteamclient.constants.Constants;
+import fr.marieteamclient.database.DatabaseConnection;
+import fr.marieteamclient.models.Equipement;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import fr.marieteamclient.models.Equipement;
-import fr.marieteamclient.database.DatabaseConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 /**
  * Contrôleur pour la modification des équipements.
@@ -56,34 +57,39 @@ public class EquipmentEditController {
      */
     private void loadEquipments() {
         try {
-            Connection conn = DatabaseConnection.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            Connection conn = database.getConnection();
+            
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM equipement");
 
-            while (rs.next()) {
-                Equipement equipement = new Equipement(
-                    rs.getInt("idEquipement"),
-                    rs.getString("labelle")
-                );
-                equipments.add(equipement);
+                while (rs.next()) {
+                    Equipement equipement = new Equipement(
+                        rs.getInt("idEquipement"),
+                        rs.getString("labelle")
+                    );
+                    equipments.add(equipement);
+                }
+
+                equipmentSelector.setItems(equipments);
+                equipmentSelector.setConverter(new javafx.util.StringConverter<Equipement>() {
+                    @Override
+                    public String toString(Equipement equipement) {
+                        return equipement.getLabelle();
+                    }
+
+                    @Override
+                    public Equipement fromString(String string) {
+                        return null;
+                    }
+                });
+
+                rs.close();
+                stmt.close();
+            } finally {
+                conn.close();
             }
-
-            equipmentSelector.setItems(equipments);
-            equipmentSelector.setConverter(new javafx.util.StringConverter<Equipement>() {
-                @Override
-                public String toString(Equipement equipement) {
-                    return equipement.getLabelle();
-                }
-
-                @Override
-                public Equipement fromString(String string) {
-                    return null;
-                }
-            });
-
-            rs.close();
-            stmt.close();
-            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,7 +113,8 @@ public class EquipmentEditController {
                 return;
             }
 
-            Connection conn = DatabaseConnection.getConnection();
+            DatabaseConnection database = new DatabaseConnection(Constants.DATABASE_URL, Constants.DATABASE_USER, Constants.DATABASE_PASSWORD);
+            Connection conn = database.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
                 "UPDATE equipement SET labelle = ? WHERE idEquipement = ?"
             );
