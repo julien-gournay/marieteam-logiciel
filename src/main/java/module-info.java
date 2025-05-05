@@ -16,7 +16,9 @@ module fr.marieteamclient {
     
     // Database module
     requires mysql.connector.j;
-    
+    requires org.junit.jupiter.api;  // Add this line to include JUnit
+
+
     // iText modules
     requires kernel;
     requires layout;
